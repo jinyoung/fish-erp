@@ -71,7 +71,8 @@ RESPONSE FORMAT:
         "speak": "thoughts summary to say to user"
     },
     "error": {
-        "name": "error name"
+        "name": "error name",
+        "speak": "error message to user"
     }
 }]  
 `
