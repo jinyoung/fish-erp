@@ -107,6 +107,7 @@ RESPONSE FORMAT:
                     command: response.command
                 })
             })
+
         },
 
         doit(message){

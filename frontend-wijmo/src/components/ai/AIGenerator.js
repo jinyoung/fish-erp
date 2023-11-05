@@ -123,24 +123,22 @@ class AIGenerator {
                     // me.continue();
                     console.log('max_token issue')
                 } 
-                // else {
+    
+                me.state = 'end';
+                let model = me.createModel(me.modelJson)
 
-                    me.state = 'end';
-                    let model = me.createModel(me.modelJson)
-
-                    if(me.client.onModelCreated){
-                        me.client.onModelCreated(model);
-                    } 
-                    // else {
-                    if(me.client.onGenerationFinished)
-                        me.client.onGenerationFinished(model)
-                    // }
-                    // if (xhr.status === 0){
-                        //     me.client.onGenerationFinished()
-                        // } else {
-                    // }
-                // }
+                if(me.client.onModelCreated){
+                    me.client.onModelCreated(model);
+                } 
+                
+                if(me.client.onGenerationFinished)
+                    me.client.onGenerationFinished(model)
             }
+
+            me.previousMessages.push({
+                role: 'system',
+                content: me.modelJson
+            })
         };
 
         
