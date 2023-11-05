@@ -14,7 +14,10 @@ class AIGenerator {
             this.previousMessages = options.previousMessages;
             this.prompt = options.prompt;
             this.model = options.model || this.model;
-        } 
+            this.options = options
+        } else{
+            this.options = {}
+        }
 
         if(!this.previousMessages)
             this.previousMessages = [];
@@ -38,7 +41,7 @@ class AIGenerator {
     }
 
     getToken() {
-        return atob(window.localStorage("openAIToken"));
+        return (window.localStorage.getItem("openAIToken"));
     }
 
     async generate(){
@@ -123,9 +126,9 @@ class AIGenerator {
                 // else {
 
                     me.state = 'end';
-                    let model = null;
+                    let model = me.createModel(me.modelJson)
+
                     if(me.client.onModelCreated){
-                        model = me.createModel(me.modelJson)
                         me.client.onModelCreated(model);
                     } 
                     // else {
@@ -152,7 +155,7 @@ class AIGenerator {
             temperature: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
-            stream: true,
+            stream: this.options.isStream,
         });
 
         xhr.send(data);
@@ -161,7 +164,7 @@ class AIGenerator {
 
     createMessages(){
         var me = this 
-        me.previousMessages = []
+        
         if(me.client.openAiMessageList){
             me.client.openAiMessageList.push({
                 role: 'user',
