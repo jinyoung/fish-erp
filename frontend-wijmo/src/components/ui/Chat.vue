@@ -1,6 +1,9 @@
 <template>
     <div style="max-height:80vh;">
-        <li v-for="(message, index) in messages" :key="index">{{message.role}} : {{message.text}}</li>
+        <li v-for="(message, index) in messages" :key="index">{{message.role}} : {{message.text}}
+        
+            <v-btn v-if="message.role == 'system'" @click="doit(message)">실행</v-btn>
+        </li>
         <v-text-field v-model="newMessage"></v-text-field>
         <v-btn @click="sendMessage">send</v-btn>
     </div>
@@ -31,15 +34,17 @@ CONSTRAINTS:
 
 1. ~4000 word limit for short term memory. Your short term memory is short, so immediately save important information to files.
 2. If you are unsure how you previously did something or want to recall past events, thinking about similar events will help you remember.
-3. No user assistance
+3. If you are unsure about any of arguments from user input, you have to create an error for user to know which argument should be input again.
 4. Exclusively use the commands listed in double quotes e.g. "command name"
 
 COMMANDS:
 
-1. 매입처리: "매입", args: "<거래처ID: string>", "<금액: number>", "<생선종류: string>", madatory args: 거래처, 생선종류
+1. 매입처리: "매입", args: "<거래처ID: string>", "<금액: number>", "<생선종류: string>", mandatory args: 거래처, 생선종류
 2. 거리처등록: "거래처등록", args: "<거래처ID: string>", "<사업자등록번호: string>"
-3. 유저입력이 잘못된 경우 (mandatory 를 유저가 기입하지 않은 경우): "추가정보입력", args: "<입력정보>"
 
+ERRORS:
+
+1. Incomplete Arguments: "INCOMPLETE-ARGS"
 
 PERFORMANCE EVALUATION:
 
@@ -64,6 +69,9 @@ RESPONSE FORMAT:
         "plan": [short bulleted,list that conveys,long-term plan],
         "criticism": "constructive self-criticism",
         "speak": "thoughts summary to say to user"
+    },
+    "error": {
+        "name": "error name"
     }
 }]  
 `
@@ -94,10 +102,16 @@ RESPONSE FORMAT:
             responses.forEach(response=> {
                 this.messages.push({
                     role:'system',
-                    text: response.thoughts.speak
+                    text: response.thoughts ? response.thoughts.speak :  response.command.name + "을 다음의 아규먼트로 실행합니다: " + JSON.stringify(response.command.args),
+                    command: response.command
                 })
             })
+        },
+
+        doit(message){
+            alert(JSON.stringify(message.command))
         }
+
     }
 }
 </script>
