@@ -24,11 +24,11 @@ export default {
     }),
 
     created(){
-        this.generator = new ChatGenerator(this, {isStream: true})
+        this.generator = new ChatGenerator(this, {isStream: true,preferredLanguage: "Korean"})
         this.generator.previousMessages = [{
             role: 'system',
             content: `
-생선가게 ERP 시스템과 사용자간 챗봇을 제공하려고 해.
+시스템과 사용자간 챗봇을 제공하려고 해.
 
 CONSTRAINTS:
 
