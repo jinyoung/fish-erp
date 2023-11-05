@@ -34,9 +34,5 @@ export default new Router({
                 component: PurchaseManager
             },
 
-
-
-
-
     ]
 })
